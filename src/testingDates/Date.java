@@ -58,19 +58,25 @@ public class Date
         }
     }
 
-    public void setDate(String monthString, int day, int year)
-    {
-        if (dateOK(monthString, day, year))
-        {
-            this.month = monthString;
-            this.day = day;
-            this.year = year;
+    public void setDate(String month, int day, int year) {
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+        
+        int monthIndex = -1;
+        for (int i = 0; i < 12; i++) {
+            if (month.equals(monthString(i + 1))) {
+                monthIndex = i;
+                break;
+            }
         }
-        else
-        {
-            System.out.println("Fatal Error in setDate(String,int, int)");
-            System.exit(0);
+
+        if (monthIndex == -1 || day < 1 || day > daysInMonth[monthIndex] || year < 1000 || year > 9999) {
+            System.out.println("Invalid date: " + month + " " + day + ", " + year);
+            return; 
         }
+
+        this.month = month;
+        this.day = day;
+        this.year = year;
     }
 
     public void setDate(int year)
@@ -159,10 +165,15 @@ public class Date
         return (month + " " + day + ", " + year);
     }
 
-    public boolean equals(Date otherDate)
-    {
-        return ( (month.equals(otherDate.month))
-                  && (day == otherDate.day) && (year == otherDate.year) );
+    // Modified the equals method to correctly implement the assert methods.
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Same memory reference
+        if (obj == null || getClass() != obj.getClass()) return false; // Type check
+        
+        Date otherDate = (Date) obj;
+        return this.day == otherDate.day &&
+               this.year == otherDate.year &&
+               this.month.equals(otherDate.month);
     }
 
     public boolean precedes(Date otherDate)
@@ -175,10 +186,27 @@ public class Date
     
     // added here
     public Date addOneDay() {
-        System.out.println("Date.addOneDay() is not yet implemented.");
-        return this; 
-    }
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
 
+        int monthIndex = getMonth() - 1; 
+
+        System.out.println("Current Date: " + month + " " + day + ", " + year);
+        
+        if (day < daysInMonth[monthIndex]) {
+            day++; 
+        } else {
+            day = 1; 
+            if (month.equals("December")) {
+                month = "January";
+                year++; 
+            } else {
+                month = monthString(monthIndex + 2); 
+            }
+        }
+
+        System.out.println("New Date: " + month + " " + day + ", " + year);
+        return this;
+    }
 
     public void readInput( )
     {
