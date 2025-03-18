@@ -172,6 +172,13 @@ public class Date
            (year == otherDate.year && month.equals(otherDate.month)
                                          && day < otherDate.day) );
     }
+    
+    // added here
+    public Date addOneDay() {
+        System.out.println("Date.addOneDay() is not yet implemented.");
+        return this; 
+    }
+
 
     public void readInput( )
     {
